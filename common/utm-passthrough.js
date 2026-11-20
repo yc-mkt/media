@@ -63,4 +63,17 @@
       return oo.apply(this, arguments);
     };
   }
+})();(function () {
+  /* [추가 2026-11-20] ENCY 턴밀 가이드북 랜딩 한정: 폼 버튼에 inquiry(문의 내용) 값을 붙여 턴밀 e-Book이 미리 체크되게.
+   * 폼 '문의 내용' 칸 주소 미리 채우기(11/18 적용)와 짝. 이미 inquiry가 있으면 건드리지 않음.
+   * 업무 hoe180hw3w9e45zv7uz1. 되돌리기 = 이 블록 삭제(이전 커밋 c770a7d). */
+  if (!/^\/guide-turnmill\/?$/.test(location.pathname)) return;
+  var VAL = "[e-Book] 턴밀(Turn Mill) 따라하기";
+  function fix(a) {
+    if (!a || !a.href || !/(^|\/\/)forms\.monday\.com\/forms\/e22b1756d369c7a9944e74c77941e1e0/.test(a.href)) return;
+    try { var u = new URL(a.href); if (!u.searchParams.get("inquiry")) { u.searchParams.set("inquiry", VAL); a.href = u.toString(); } } catch (e) {}
+  }
+  function run() { document.querySelectorAll("a[href]").forEach(fix); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
+  document.addEventListener("click", function (e) { var a = e.target.closest && e.target.closest("a[href]"); if (a) fix(a); }, true);
 })();
